@@ -3,9 +3,10 @@ from sklearn.base import BaseEstimator
 
 
 class RidgeRegression(BaseEstimator):
-    def __init__(self, span=None, precision=0.):
+    def __init__(self, span=None, precision=0., scale_precision_by_n=False):
         self.span = span
         self.precision = float(precision)
+        self.scale_precision_by_n = scale_precision_by_n
 
         if span is None:
             self.retain = 1.
@@ -34,7 +35,12 @@ class RidgeRegression(BaseEstimator):
     def partial_fit(self, X, y):
         self._update_state(X, y)
 
-        nI = self.n * np.eye(len(self.XtX))
+        nI = np.eye(len(self.XtX))
+        if self.scale_precision_by_n:
+            nI = self.N * nI
+
+        # Solve using normal equations:
+        #     \Beta = (X'X)^{-1}X'Y
         self.coef_ = np.linalg.pinv(
             self.XtX + self.precision * nI
         ).dot(self.XtY)
