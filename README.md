@@ -46,6 +46,16 @@ print("Actual coefs:\n%s" % true_coefficients)
 print("Estimated coefs:\n%s" % ridge.coef_)
 print("Out of sample R2:\n%.4f" % ridge.score(X[100:], Y[100:]))
 ```
+```
+Actual coefs:
+[[ 0.3 -0.1]
+ [-0.1  0.3]]
+Estimated coefs:
+[[ 0.32256367 -0.15270524]
+ [-0.07430376  0.45857161]]
+Out of sample R2:
+0.0514
+```
 
 But the value of this library is that you can estimate incrementally, one row at a time. Let's show how to do the same process in the previous cell incrementally. This will further allow us to inspect our estimated coefficients at each step:
 ```python
@@ -76,3 +86,4 @@ plot_data.plot(ylim=(0., 1.), title='Estimated vs Actual Coefficient')
 xlabel('# Samples')
 show()
 ```
+![alt text](./readme/coef_estimation.png)
