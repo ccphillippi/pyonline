@@ -86,4 +86,4 @@ plot_data.plot(ylim=(0., 1.), title='Estimated vs Actual Coefficient')
 xlabel('# Samples')
 show()
 ```
-![alt text](./readme/coef_estimation.png =500x)
+![alt text](./readme/coef_estimation.png)
