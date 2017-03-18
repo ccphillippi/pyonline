@@ -57,7 +57,7 @@ Out of sample R2:
 0.0514
 ```
 
-But the value of this library is that you can estimate incrementally, one row at a time. Let's show how to do the same process in the previous cell incrementally. This will further allow us to inspect our estimated coefficients at each step:
+But the value of this library is that you can estimate incrementally, one to `n` row(s) at a time. Let's show how to do the same process in the previous cell incrementally. This will further allow us to inspect our estimated coefficients at each step:
 ```python
 # Let's reset the state of the ridge regression
 ridge = RidgeRegression(span=250, precision=5.)
