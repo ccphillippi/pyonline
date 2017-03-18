@@ -11,7 +11,9 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 with open(path.join(here, 'dependencies.txt'), encoding='utf-8') as f:
-    dependencies = [dep for dep in f.readlines() if dep]
+    dependencies = [dep
+                    for dep in f.readlines()
+                    if dep and (dep[0] != '#')]
 
 setup(
     name='sample',
