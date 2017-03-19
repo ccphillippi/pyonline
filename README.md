@@ -2,6 +2,8 @@
 
 This library contains online versions of commonly used learning algorithms such as Ridge Regression, Covariance Estimation, and the P2 algorithm for approximating percentiles. The API is inspired by Scikit-learn and in fact, they all inherit from the `sklearn.BaseEstimator`, which allows these models to be used in Scikit-Learn's cross validation, pipeline, or union tools. 
 
+The motivation and algorithms chosen for this library is highly influenced by the [LiveStats](https://bitbucket.org/scassidy/livestats) repository by Sean Cassidy.
+
 ## Installation
 
 For now, you'll want to [download this repository as a zip file](https://bitbucket.org/ccphillippi/pyonline/get/master.zip) and install via:
@@ -14,9 +16,9 @@ For now, you'll want to [download this repository as a zip file](https://bitbuck
 
 ### Ridge Regression
 
-The ridge regression is the most basic model provided here. It's effectively a linear regression, with a bayesion prior on the coefficients, such that they are distributed as a normal distribution with a mean of 0 and variance of ```1. / precision```. In practice, this penalizes large coefficients, providing a more robust fit. 
+The ridge regression is the most basic model provided here. It's effectively a linear regression, with a Bayesion prior on the coefficients, such that they are distributed as a normal distribution with a mean of 0 and variance of ```1. / precision```. In practice, this penalizes large coefficients, providing a more robust fit. 
 
-We'll start by specifying our ```RidgeRegression``` with the `span` paramater of `250`, which specifies our maximum statistical sample size, and a 'precision` parameter of 0.1, which specifies our prior of our coefficient distribution:
+We'll start by specifying our ```RidgeRegression``` with the `span=250` parameter, which specifies our maximum statistical sample size, and a 'precision=.1` parameter, which specifies our prior of our coefficient distribution:
 ```python
 from pyonline.ridge import RidgeRegression
 ridge = RidgeRegression(span=250, precision=5.)
@@ -57,7 +59,7 @@ Out of sample R2:
 0.0514
 ```
 
-But the value of this library is that you can estimate incrementally, one to `n` row(s) at a time. Let's show how to do the same process in the previous cell incrementally. This will further allow us to inspect our estimated coefficients at each step:
+However, the value of this library is that you can estimate incrementally, one to `n` row(s) at a time. Let's show how to do the same process in the previous cell incrementally. This will further allow us to inspect our estimated coefficients at each step:
 ```python
 # Let's reset the state of the ridge regression
 ridge = RidgeRegression(span=250, precision=5.)
