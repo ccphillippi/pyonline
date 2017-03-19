@@ -4,7 +4,7 @@ This library contains online versions of commonly used learning algorithms such 
 
 ## Installation
 
-For now, you'll want to download this repository as a zip file and install via:
+For now, you'll want to [download this repository as a zip file](https://bitbucket.org/ccphillippi/pyonline/get/master.zip) and install via:
 
 ```bash
 	pip install pyonline.zip
