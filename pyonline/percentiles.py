@@ -160,7 +160,7 @@ def _update_state(xs, markers, quantiles, desired_markers, dn,
                 markers[j] += dj
 
 
-class CDFEstimator(BaseEstimator):
+class Percentiles(BaseEstimator):
     def __init__(self, n_markers=10):
         self.n_markers = n_markers
         self.markers = np.arange(self.n_markers, dtype=np.int64) + 1
