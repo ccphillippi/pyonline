@@ -2,7 +2,25 @@ from sklearn.base import BaseEstimator
 import numpy as np
 
 
-class Covariance(BaseEstimator):
+class BaseCovariance(BaseEstimator):
+
+    def predict(self, X=None, y=None):
+        return self.covariance_
+
+
+class ConstantCovariance(BaseCovariance):
+    def __init__(self, value):
+        self.value = value
+        self.covariance_ = value
+
+    def partial_fit(self, X, y=None):
+        return self
+
+    def fit(self, X, y=None):
+        return self.partial_fit(X, y)
+
+
+class Covariance(BaseCovariance):
     def __init__(self, span=None):
         self.span = span
 
