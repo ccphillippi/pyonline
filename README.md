@@ -2,7 +2,7 @@
 
 This library contains online versions of commonly used learning algorithms such as Ridge Regression, Covariance Estimation, and the P2 algorithm for approximating percentiles. The API is inspired by Scikit-learn and in fact, they all inherit from the `sklearn.BaseEstimator`, which allows these models to be used in Scikit-Learn's cross validation, pipeline, or union tools. 
 
-The motivation and algorithms chosen for this library is highly influenced by the [LiveStats](https://bitbucket.org/scassidy/livestats) repository by Sean Cassidy.
+The motivation/algorithms chosen for this library are highly influenced by the [LiveStats](https://bitbucket.org/scassidy/livestats) repository.
 
 ## Installation
 
