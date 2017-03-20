@@ -4,7 +4,7 @@ from scipy.linalg import block_diag
 from sklearn.base import BaseEstimator
 
 from .helpers import Initializer, force_matrix
-from .covariance import Covariance
+from . import covariance
 
 
 class DynamicRidge(BaseEstimator):
@@ -15,7 +15,7 @@ class DynamicRidge(BaseEstimator):
         self.coef_mean = 0.
         self.min_samples = min_samples
         if covariance_model is None:
-            self.covariance_model = Covariance()
+            self.covariance_model = covariance.DiagonalCovariance()
         else:
             self.covariance_model = covariance_model
 
@@ -128,3 +128,22 @@ class DynamicRidge(BaseEstimator):
         X = force_matrix(X, col=False)
 
         return np.dot(X, self.block_coef)
+
+
+class FilteredMean(DynamicRidge):
+    def __init__(self, span, sd, min_samples=30, covariance_model=None):
+        self.span = span
+        self.sd = sd
+        self.min_samples = min_samples
+        self.covariance_model = covariance_model
+
+        super(FilteredMean, self).__init__(
+            span=span, coef_sd=sd,
+            min_samples=min_samples,
+            covariance_model=covariance_model,
+        )
+
+    def partial_fit(self, X, y=None):
+        return super(FilteredMean, self).partial_fit(
+            np.ones(len(X)), X
+        )

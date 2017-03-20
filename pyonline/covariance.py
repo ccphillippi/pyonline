@@ -104,3 +104,12 @@ class Covariance(BaseCovariance):
 
     def fit(self, X, y=None):
         return self.partial_fit(X, y)
+
+
+class DiagonalCovariance(Covariance):
+
+    def partial_fit(self, X, y=None):
+        super(DiagonalCovariance, self).partial_fit(X, y)
+        self.covariance_ = np.diag(np.diag(self.covariance_))
+
+        return self
