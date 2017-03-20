@@ -48,15 +48,16 @@ def build_dynamic_ridge_data(
 class TestFilters(unittest.TestCase):
     def test_dynamic_ridge(self):
         import pandas as pd
-        from pyonline.filter import DynamicRidge, Covariance
+        from pyonline.covariance import DiagonalCovariance
+        from pyonline.filter import DynamicRidge
 
         plot = True
 
         dynamic_ridge = DynamicRidge(
             span=200,
-            coef_sd=.1,
+            coef_sd=.3,
             min_samples=30,
-            covariance_model=Covariance()
+            covariance_model=DiagonalCovariance()
         )
 
         # Get train data
