@@ -4,7 +4,7 @@ from scipy.linalg import block_diag
 from sklearn.base import BaseEstimator
 
 from .helpers import Initializer, force_matrix
-from . import covariance
+from .covariance import DiagonalCovariance
 
 
 class DynamicRidge(BaseEstimator):
@@ -15,7 +15,7 @@ class DynamicRidge(BaseEstimator):
         self.coef_mean = 0.
         self.min_samples = min_samples
         if covariance_model is None:
-            self.covariance_model = covariance.DiagonalCovariance()
+            self.covariance_model = DiagonalCovariance()
         else:
             self.covariance_model = covariance_model
 
