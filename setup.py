@@ -16,7 +16,7 @@ with open(path.join(here, 'dependencies.txt'), encoding='utf-8') as f:
                     if dep and (dep[0] != '#')]
 
 setup(
-    name='sample',
+    name='pyonline',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
