@@ -294,57 +294,21 @@ def _update_state_pcubed(xs, markers, quantiles, desired_markers,
 
 @numba_jit()
 def _update_adaptive_state(xs, markers, quantiles, desired_markers,
-                           n_x, n_markers, dn, curve_power):
+                           n_x, n_markers, dn):
 
     nm1 = n_markers - 1
     # store derivatives
-    #f = np.empty((3, n_markers), dtype=np.float64)
     dx = np.empty(nm1, dtype=np.float64)
     dy = np.empty(nm1, dtype=np.float64)
     dydx = np.empty(nm1, dtype=np.float64)
     f_1 = np.empty(n_markers, dtype=np.float64)
     curvature = np.empty(n_markers - 1, dtype=np.float64)
-    #_2_dy = np.empty(n_markers, dtype=np.float64)
-    #_2_dx = np.empty(n_markers, dtype=np.float64)
 
     for i in range(n_x):
         x = xs[i]
 
         k = _update_markers(x, markers, quantiles, n_markers)
 
-        '''
-        #f[0, 0] = quantiles[0]
-        #_2_dy[0] = 2. * (quantiles[1] - quantiles[0])
-        #_2_dx[1] = 2. * (float(markers[1]) - float(markers[0]))
-        #for j in range(1, n_markers -1):
-        #    f[0, j] = quantiles[j]
-        #    _2_dy
-        #f[0, nm1] = quantiles[nm1]
-        #_2_dy[nm1] = 2. * (quantiles[nm1] - quantiles[nm1 - 1])
-        #_2_dx[nm1] = 2. * (float(markers[nm1]) - float(markers[nm1 - 1]))
-        '''
-
-        # Approximate f', f''
-        '''
-        for prime in range(1, 3):
-            prev = prime - 1
-            f[prime, 0] = (
-                    (f[prev, 1] - f[prev, 0]) /
-                    float(markers[1] - markers[0])
-            )
-            for j in range(1, n_markers - 1):
-                p = j + 1
-                m = j - 1
-                f[prime, j] = (
-                    (f[prev, p] - f[prev, m]) /
-                    float(markers[p] - markers[m])
-                )
-            m = nm1 - 1
-            f[prime, n_markers - 1] = (
-                (f[prev, nm1] - f[prev, m]) /
-                float(markers[nm1] - markers[m])
-            )
-        '''
         for j in range(n_markers - 1):
             dx[j] = float(markers[j + 1] - markers[j])
             dy[j] = quantiles[j + 1] - quantiles[j]
@@ -367,40 +331,16 @@ def _update_adaptive_state(xs, markers, quantiles, desired_markers,
             dx_prev / (dx_prev + dx[nm1 - 2]) * (dydx_prev - dydx[nm1 - 2])
         )
 
-        # Estimate Curvature
-        #dx = 2. * (markers[1] - markers[0])
-        #dy = 2. * (quantiles[1] - quantiles[0])
-        #curvature[0] = np.abs(f[2, j]) * np.sqrt(dx * dx + dy * dy) * dx
-        #for j in range(1, n_markers - 1):
-            #curvature[j] = np.abs(f[2, j]) #/ (1. + f[1, j] ** 2) ** (3. / 2.)
-
-            #dx = markers[j + 1] - markers[j - 1]
-            #dy = quantiles[j + 1] - quantiles[j - 1]
-            #curvature[j] = np.abs(f[2, j]) * np.sqrt(dx * dx + dy * dy) * dx
-
         for j in range(n_markers - 1):
             _dx = dx[j] / float(markers[nm1])
 
             # Notice we're using abs(f'' * dx) here in order to approximate the integral over x
             curvature[j] = np.abs((f_1[j + 1] - f_1[j]) / dydx[j]) * _dx
 
-        #dx = 2. * float(markers[nm1] - markers[nm1 - 1])
-        #dy = quantiles[n_markers - 1] - quantiles[n_markers - 2]
-        #curvature[n_markers - 1] = (
-        #    np.abs(f[2, n_markers - 1]) *
-        #    np.sqrt(dx * dx + dy * dy) *
-        #    dx
-        #)
-
         n_m1 = float(markers[n_markers - 1] - 1.)
         desired_markers[0] = 1.
         for j in range(1, n_markers - 1):
-
-            #curve = curvature[j]
-            #left_curve = np.sqrt(np.sqrt(curve + curvature[j - 1])) * float(markers[j] - markers[j - 1])
-            #right_curve = np.sqrt(np.sqrt(curve + curvature[j + 1])) * float(markers[j + 1] - markers[j])
             left_curve = curvature[j - 1]
-            #right_curve = curvature[j + 1]
             right_curve = curvature[j]
 
             forward = right_curve - left_curve
@@ -573,9 +513,6 @@ class Percentiles(BaseEstimator):
 
 
 class PCubed(Percentiles):
-    def __init__(self, n_markers=10, power=0.5):
-        super(PCubed, self).__init__(n_markers=n_markers)
-        self.power = power
     def _partial_fit(self, x):
         self.curvature = _update_adaptive_state(
             np.asarray(x),
@@ -584,8 +521,7 @@ class PCubed(Percentiles):
             self.desired_markers,
             len(x),
             self.n_markers,
-            self.dn,
-            self.power
+            self.dn
         )
 
         self.monotonic_interpolation = None
