@@ -6,10 +6,8 @@ The motivation/algorithms chosen for this library are highly influenced by the [
 
 ## Installation
 
-For now, you'll want to [download this repository as a zip file](https://bitbucket.org/ccphillippi/pyonline/get/master.zip) and install via:
-
 ```bash
-	pip install pyonline.zip
+	pip install git+https://github.com/ccphillippi/pyonline
 ```
 
 ## Tutorial
