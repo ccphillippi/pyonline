@@ -387,6 +387,9 @@ def _update_adaptive_state(xs, markers, quantiles, desired_markers,
     return curvature
 
 class Percentiles(BaseEstimator):
+    '''
+    Direct implementation of "The P2 Algorithm for Dynamic Calculation of Quantiles and Histograms Without Storing Observations" by Raj Jain and Imrich Chlamtac
+    '''
     FLOAT = np.float64
     INT = np.int64
 
