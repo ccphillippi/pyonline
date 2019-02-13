@@ -1,12 +1,13 @@
 import numpy as np
 from sklearn.base import BaseEstimator
 
-DISABLE_JIT = False
+class Config:
+    DISABLE_JIT = False
 
 def numba_jit(nopython=True, nogil=True, **kwds):
     def wrapped(func):
 
-        if DISABLE_JIT:
+        if Config.DISABLE_JIT:
             return func
 
         try:
